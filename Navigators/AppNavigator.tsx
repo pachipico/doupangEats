@@ -2,11 +2,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FavoritesScreen from '../Screens/FavoritesScreen/FavoritesScreen';
+
 import HomeScreen from '../Screens/HomeScreen/HomeScreen';
 import MyEatsScreen from '../Screens/MyEatsScreen/MyEatsScreen';
 import OrderScreen from '../Screens/OrderScreen/OrderScreen';
 import SearchScreen from '../Screens/SearchScreen/SearchScreen';
+import FavoriteNavigator from './FavoriteNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,7 +16,7 @@ const AppNavigator = () => {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({route}) => ({
-          tabBarIcon: ({focused, color, size}) => {
+          tabBarIcon: ({focused}) => {
             let iconName;
             switch (route.name) {
               case '홈':
@@ -62,7 +63,7 @@ const AppNavigator = () => {
         />
         <Tab.Screen
           name="즐겨찾기"
-          component={FavoritesScreen}
+          component={FavoriteNavigator}
           options={{headerShown: false}}
         />
         <Tab.Screen

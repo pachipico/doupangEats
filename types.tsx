@@ -5,3 +5,7 @@ export type myEatsData = {
   text: string;
   iconName: string;
 };
+
+export type StackParamList = {
+  FavoritesScreen: undefined;
+};

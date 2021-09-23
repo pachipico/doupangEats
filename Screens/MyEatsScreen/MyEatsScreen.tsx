@@ -34,7 +34,7 @@ const MyEatsScreen = () => {
       <Ad />
       <Body>
         {myEatsDatas.map((item, i) => {
-          return <List text={item.text} iconName={item.iconName} />;
+          return <List key={i} text={item.text} iconName={item.iconName} />;
         })}
       </Body>
     </Container>
