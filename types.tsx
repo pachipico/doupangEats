@@ -8,4 +8,5 @@ export type myEatsData = {
 
 export type StackParamList = {
   FavoritesScreen: undefined;
+  AppNavigator: undefined;
 };
