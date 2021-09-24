@@ -1,10 +1,7 @@
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import React from 'react';
-
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FavoritesScreen from '../Screens/FavoritesScreen/FavoritesScreen';
-
 import HomeScreen from '../Screens/HomeScreen/HomeScreen';
 import MyEatsScreen from '../Screens/MyEatsScreen/MyEatsScreen';
 import OrderScreen from '../Screens/OrderScreen/OrderScreen';
@@ -63,12 +60,6 @@ const AppNavigator = () => {
           component={SearchScreen}
           options={{headerShown: false}}
         />
-
-        <Tab.Screen
-          name="주문내역"
-          component={OrderScreen}
-          options={{headerShown: false}}
-        />
         <Tab.Screen
           name="즐겨찾기"
           component={FavoriteNavigator}
@@ -76,6 +67,12 @@ const AppNavigator = () => {
             tabBarStyle: {display: 'none'},
             headerShown: false,
           }}
+        />
+
+        <Tab.Screen
+          name="주문내역"
+          component={OrderScreen}
+          options={{headerShown: false}}
         />
         <Tab.Screen
           name="My 이츠"

@@ -4,6 +4,8 @@ import {
   Body,
   Header,
   HeaderText,
+  HeaderText1,
+  HeaderText2,
   LeftTextWrapper,
   RightTextWrapper,
 } from './style';
@@ -21,7 +23,7 @@ const OrderScreen = () => {
           onPress={() => {
             setCurrentTab('left');
           }}>
-          <HeaderText>과거 주문 내역</HeaderText>
+          <HeaderText1 currTab={currTab}>과거 주문 내역</HeaderText1>
         </LeftTextWrapper>
         <RightTextWrapper
           currTab={currTab}
@@ -29,7 +31,7 @@ const OrderScreen = () => {
           onPress={() => {
             setCurrentTab('right');
           }}>
-          <HeaderText>준비중</HeaderText>
+          <HeaderText2 currTab={currTab}>준비중</HeaderText2>
         </RightTextWrapper>
       </Header>
       <Body>{currTab === 'left' ? <OrderHistory /> : <CurrentOrder />}</Body>

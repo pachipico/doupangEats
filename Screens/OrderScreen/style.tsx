@@ -26,8 +26,12 @@ export const RightTextWrapper = styled.TouchableOpacity<{currTab: string}>`
   padding: 10px;
 `;
 
-export const HeaderText = styled.Text``;
-
+export const HeaderText1 = styled.Text<{currTab: string}>`
+  color: ${p => (p.currTab === 'left' ? 'black' : '#b5b5b5')};
+`;
+export const HeaderText2 = styled.Text<{currTab: string}>`
+  color: ${p => (p.currTab === 'right' ? 'black' : '#b5b5b5')};
+`;
 export const Body = styled.View`
   flex: 1;
   margin-top: 55px;

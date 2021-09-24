@@ -22,6 +22,7 @@ const FavoriteNavigator: React.FC<StackProps> = ({route, navigation}) => {
         name="FavoriteScreen"
         component={FavoritesScreen}
         options={{
+          headerTitle: '즐겨찾기',
           headerShown: true,
           headerLeft: () => {
             return (
