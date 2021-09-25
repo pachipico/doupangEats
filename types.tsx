@@ -10,3 +10,9 @@ export type StackParamList = {
   FavoritesScreen: undefined;
   AppNavigator: undefined;
 };
+
+export type HomeStackParamList = {
+  HomeScreen: undefined;
+  AddressSettingModal: undefined;
+  AddressSearchScreen: undefined;
+};

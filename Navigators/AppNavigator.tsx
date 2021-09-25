@@ -2,11 +2,11 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from '../Screens/HomeScreen/HomeScreen';
 import MyEatsScreen from '../Screens/MyEatsScreen/MyEatsScreen';
 import OrderScreen from '../Screens/OrderScreen/OrderScreen';
 import SearchScreen from '../Screens/SearchScreen/SearchScreen';
 import FavoriteNavigator from './FavoriteNavigator';
+import HomeNavigator from './HomeNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,7 +52,7 @@ const AppNavigator = () => {
         })}>
         <Tab.Screen
           name="홈"
-          component={HomeScreen}
+          component={HomeNavigator}
           options={{headerShown: false}}
         />
         <Tab.Screen

@@ -1,8 +1,11 @@
-import React, {useRef, useState} from 'react';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useState} from 'react';
 import * as Animatable from 'react-native-animatable';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 import Ad from '../../Components/MyEatsComponent/Ad';
+import {HomeStackParamList} from '../../types';
 import {
   Bar,
   Body,
@@ -19,17 +22,28 @@ import {
 
 const Test = Animatable.createAnimatableComponent(styled.View``);
 
-const HomeScreen = () => {
+type StackProps = {
+  route: RouteProp<HomeStackParamList, 'HomeScreen'>;
+  navigation: StackNavigationProp<HomeStackParamList, 'HomeScreen'>;
+};
+
+const HomeScreen: React.FC<StackProps> = ({route, navigation}) => {
   const [isScrolling, setIsScrollEnd] = useState<boolean>(false);
   const [isClosed, setIsClosed] = useState<boolean>(false);
-  const AnimationRef = useRef(null);
+
   return (
     <Container>
       <Header>
-        <HeaderContent>
+        <HeaderContent
+          onPress={() => {
+            navigation.navigate('AddressSettingModal');
+          }}>
           <HeaderText>집</HeaderText>
         </HeaderContent>
-        <IconWrapper onPress={() => {}}>
+        <IconWrapper
+          onPress={() => {
+            navigation.navigate('AddressSearchScreen');
+          }}>
           <Icon name="magnify" size={25} color="black" />
         </IconWrapper>
       </Header>
