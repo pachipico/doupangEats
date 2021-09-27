@@ -15,4 +15,9 @@ export type HomeStackParamList = {
   HomeScreen: undefined;
   AddressSettingModal: undefined;
   AddressSearchScreen: undefined;
+  AddressDetail: {address: string};
+};
+
+export type LocationData = {
+  roadAddr: string;
 };
