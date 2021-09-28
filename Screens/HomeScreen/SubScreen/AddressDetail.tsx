@@ -1,13 +1,15 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 
 import {HomeStackParamList} from '../../../types';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Keyboard, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 
-const Container = styled.SafeAreaView``;
+const Container = styled.SafeAreaView`
+  flex: 1;
+`;
 
 const TouchWrapper = styled.TouchableOpacity``;
 const Header = styled.View`
@@ -29,8 +31,6 @@ const HeaderTitle = styled.Text`
 const Content = styled.ScrollView`
   padding: 0px 15px;
 `;
-
-const KeyboardDismissView = styled.TouchableWithoutFeedback``;
 
 const Location = styled.View`
   flex-direction: row;
@@ -106,6 +106,8 @@ const ButtonText3 = styled.Text<{selectedBtn: number}>`
   color: ${props => (props.selectedBtn === 3 ? 'skyblue' : 'black')};
 `;
 
+const SubmitButton = styled.Button``;
+
 type Props = {
   navigation: StackNavigationProp<HomeStackParamList, 'AddressDetail'>;
   route: RouteProp<HomeStackParamList, 'AddressDetail'>;
@@ -116,8 +118,8 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
   const [extraInfo, setExtraInfo] = useState<string>();
   const [selectedBtn, setSelectedBtn] = useState<number>(0);
   const btnRef = useRef<TouchableOpacity>(null);
-
   const {address} = route.params;
+
   return (
     <Container>
       <Header>
@@ -144,6 +146,7 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
           </TextWrapper>
         </Location>
         <AddressInput
+          keyboardType="name-phone-pad"
           autoCapitalize="none"
           autoCorrect={false}
           onEndEditing={() => {
@@ -159,6 +162,7 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
           placeholder="상세주소 (아파트/동/호)"
         />
         <AddressInput
+          keyboardType="name-phone-pad"
           autoCapitalize="none"
           autoCorrect={false}
           onEndEditing={() => {
@@ -204,6 +208,7 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
           </SelectButton3>
         </ButtonContainer>
       </Content>
+      <SubmitButton title="완료" onPress={() => {}} />
     </Container>
   );
 };
