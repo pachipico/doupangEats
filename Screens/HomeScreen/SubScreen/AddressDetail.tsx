@@ -1,6 +1,6 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {HomeStackParamList} from '../../../types';
 import styled from 'styled-components/native';
@@ -114,7 +114,7 @@ const SubmitButton = styled.Button``;
 const ButtonWrapper = styled.View<{keyboardHeight: number}>`
   margin-bottom: ${props =>
     props.keyboardHeight ? props.keyboardHeight - 80 + 'px' : 0};
-  background-color: purple;
+  background-color: #1f6ce2;
 `;
 
 type Props = {
@@ -129,7 +129,9 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
   const btnRef = useRef<TouchableOpacity>(null);
   const {address} = route.params;
   const [keyboardHeight] = useKeyboard();
-
+  useEffect(() => {
+    setDetail('');
+  }, []);
   return (
     <>
       <Container>
@@ -163,10 +165,14 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
             autoCapitalize="none"
             autoCorrect={false}
             onEndEditing={() => {
-              setDetail('');
+              if (detail === '상세주소|') {
+                setDetail('');
+              }
             }}
             onFocus={() => {
-              setDetail('상세주소|');
+              if (detail === '') {
+                setDetail('상세주소|');
+              }
             }}
             onChangeText={prev => {
               setDetail(prev);
@@ -179,11 +185,15 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
             autoCapitalize="none"
             autoCorrect={false}
             onEndEditing={() => {
-              setExtraInfo('');
+              if (extraInfo === '길 안내|') {
+                setExtraInfo('');
+              }
             }}
             value={extraInfo}
             onFocus={() => {
-              setExtraInfo('길 안내|');
+              if (extraInfo === '') {
+                setExtraInfo('길 안내|');
+              }
             }}
             onChangeText={prev => {
               setExtraInfo(prev);
@@ -224,9 +234,27 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
       </Container>
       <ButtonWrapper keyboardHeight={keyboardHeight}>
         <SubmitButton
+          color="white"
           title="완료"
           onPress={() => {
-            console.log(keyboardHeight);
+            console.log(
+              detail?.slice(detail?.indexOf('|') + 1, detail?.length),
+              extraInfo?.slice(extraInfo?.indexOf('|') + 1, extraInfo?.length),
+            );
+            navigation.navigate('HomeScreen', {
+              address: route.params.address.slice(
+                0,
+                route.params.address.indexOf('('),
+              ),
+              addressDetail: detail?.slice(
+                detail?.indexOf('|') + 1,
+                detail?.length,
+              ),
+              extraDetail: extraInfo?.slice(
+                extraInfo?.indexOf('|') + 1,
+                extraInfo?.length,
+              ),
+            });
           }}
         />
       </ButtonWrapper>

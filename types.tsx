@@ -13,7 +13,7 @@ export type StackParamList = {
 
 export type HomeStackParamList = {
   HomeNavigator: undefined;
-  HomeScreen: undefined;
+  HomeScreen: {address: string; addressDetail?: string; extraDetail?: string};
   AddressSettingModal: undefined;
   AddressSearchScreen: undefined;
   AddressDetail: {address: string};

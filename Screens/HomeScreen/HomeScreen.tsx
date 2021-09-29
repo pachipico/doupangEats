@@ -1,6 +1,6 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import * as Animatable from 'react-native-animatable';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
@@ -25,9 +25,10 @@ const Test = Animatable.createAnimatableComponent(styled.View``);
 type StackProps = {
   route: RouteProp<HomeStackParamList, 'HomeScreen'>;
   navigation: StackNavigationProp<HomeStackParamList, 'HomeScreen'>;
+  address: string;
 };
 
-const HomeScreen: React.FC<StackProps> = ({route, navigation}) => {
+const HomeScreen: React.FC<StackProps> = ({route, navigation, address}) => {
   const [isScrolling, setIsScrollEnd] = useState<boolean>(false);
   const [isClosed, setIsClosed] = useState<boolean>(false);
 
@@ -38,11 +39,11 @@ const HomeScreen: React.FC<StackProps> = ({route, navigation}) => {
           onPress={() => {
             navigation.navigate('AddressSettingModal');
           }}>
-          <HeaderText>집</HeaderText>
+          <HeaderText>{route.params.address}</HeaderText>
         </HeaderContent>
         <IconWrapper
           onPress={() => {
-            navigation.navigate('AddressSearchScreen');
+            console.log(route.params);
           }}>
           <Icon name="magnify" size={25} color="black" />
         </IconWrapper>
