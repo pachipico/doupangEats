@@ -24,7 +24,7 @@ export type LocationData = {
 };
 
 export type Address = {
-  main: string;
+  address_name: string;
   detail?: string;
   extra?: string;
   name?: string | null;

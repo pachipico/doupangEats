@@ -39,7 +39,7 @@ const HomeScreen: React.FC<StackProps> = ({route, navigation}) => {
           onPress={() => {
             navigation.navigate('AddressSettingModal');
           }}>
-          <HeaderText>{route.params.main}</HeaderText>
+          <HeaderText>{route.params.address_name}</HeaderText>
         </HeaderContent>
         <IconWrapper
           onPress={() => {

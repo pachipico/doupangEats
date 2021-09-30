@@ -263,7 +263,7 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
               extraInfo?.slice(extraInfo?.indexOf('|') + 1, extraInfo?.length),
             );
             navigation.navigate('HomeScreen', {
-              main: route.params.address.slice(
+              address_main: route.params.address.slice(
                 0,
                 route.params.address.indexOf('('),
               ),

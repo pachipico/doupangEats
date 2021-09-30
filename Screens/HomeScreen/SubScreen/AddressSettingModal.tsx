@@ -1,7 +1,10 @@
+import Geolocation from '@react-native-community/geolocation';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React from 'react';
+import axios from 'axios';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
-import {HomeStackParamList} from '../../../types';
+import {KAKAO_KEY} from '../../../config';
+import {Address, HomeStackParamList} from '../../../types';
 
 const Container = styled.SafeAreaView`
   background-color: white;
@@ -58,6 +61,15 @@ type ModalProps = {
 };
 
 const AddressSettingModal: React.FC<ModalProps> = ({navigation}) => {
+  const [currLocation, setCurrLocation] = useState<Address>();
+  const handleSearch = (lat: number, long: number) => {
+    const url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?input_coord=WGS84&y=${lat}&x=${long}`;
+    const headers = {Authorization: `KakaoAK ${KAKAO_KEY}`};
+    axios.get(url, {headers: headers}).then(response => {
+      // console.log(response.data.documents[0]);
+      setCurrLocation(response.data.documents[0].address);
+    });
+  };
   return (
     <Container>
       <ColorContainer>
@@ -77,7 +89,20 @@ const AddressSettingModal: React.FC<ModalProps> = ({navigation}) => {
           }}>
           <InputLocation>도로명, 건물명 또는 지번으로 검색</InputLocation>
         </InputContainer>
-        <CurrentButtonWrapper onPress={() => {}}>
+        <CurrentButtonWrapper
+          onPress={() => {
+            Geolocation.getCurrentPosition(info => {
+              const lat = info.coords.latitude;
+              const long = info.coords.longitude;
+              handleSearch(lat, long);
+            });
+
+            if (currLocation) {
+              navigation.navigate('HomeScreen', {
+                address_name: currLocation.address_name,
+              });
+            }
+          }}>
           <CurrentLocationButtonText>
             현재 위치로 주소 찾기
           </CurrentLocationButtonText>
