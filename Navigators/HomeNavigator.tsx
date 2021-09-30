@@ -24,7 +24,7 @@ const HomeNavigator: React.FC<Props> = ({navigation, route}) => {
         name="HomeScreen"
         component={HomeScreen}
         options={{headerShown: false}}
-        initialParams={{address: '주소 검색'}}
+        initialParams={{main: '주소검색'}}
       />
       <Group>
         <Screen

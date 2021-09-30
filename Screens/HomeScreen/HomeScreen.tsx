@@ -5,7 +5,7 @@ import * as Animatable from 'react-native-animatable';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 import Ad from '../../Components/MyEatsComponent/Ad';
-import {HomeStackParamList} from '../../types';
+import {Address, HomeStackParamList} from '../../types';
 import {
   Bar,
   Body,
@@ -25,10 +25,10 @@ const Test = Animatable.createAnimatableComponent(styled.View``);
 type StackProps = {
   route: RouteProp<HomeStackParamList, 'HomeScreen'>;
   navigation: StackNavigationProp<HomeStackParamList, 'HomeScreen'>;
-  address: string;
+  address: Address;
 };
 
-const HomeScreen: React.FC<StackProps> = ({route, navigation, address}) => {
+const HomeScreen: React.FC<StackProps> = ({route, navigation}) => {
   const [isScrolling, setIsScrollEnd] = useState<boolean>(false);
   const [isClosed, setIsClosed] = useState<boolean>(false);
 
@@ -39,7 +39,7 @@ const HomeScreen: React.FC<StackProps> = ({route, navigation, address}) => {
           onPress={() => {
             navigation.navigate('AddressSettingModal');
           }}>
-          <HeaderText>{route.params.address}</HeaderText>
+          <HeaderText>{route.params.main}</HeaderText>
         </HeaderContent>
         <IconWrapper
           onPress={() => {

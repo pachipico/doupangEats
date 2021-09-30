@@ -75,7 +75,7 @@ const SelectButton1 = styled.TouchableOpacity<{selected: number}>`
   width: 30%;
   height: 60px;
   border: ${props =>
-    props.selected === 1 ? '1px solid skyblue' : '1px solid black'};
+    props.selected === 1 ? '2px solid skyblue' : '1px solid black'};
   align-items: center;
   justify-content: center;
 `;
@@ -83,7 +83,7 @@ const SelectButton2 = styled.TouchableOpacity<{selected: number}>`
   width: 30%;
   height: 60px;
   border: ${props =>
-    props.selected === 2 ? '1px solid skyblue' : '1px solid black'};
+    props.selected === 2 ? '2px solid skyblue' : '1px solid black'};
   align-items: center;
   justify-content: center;
 `;
@@ -91,7 +91,7 @@ const SelectButton3 = styled.TouchableOpacity<{selected: number}>`
   width: 30%;
   height: 60px;
   border: ${props =>
-    props.selected === 3 ? '1px solid skyblue' : '1px solid black'};
+    props.selected === 3 ? '2px solid skyblue' : '1px solid black'};
   align-items: center;
   justify-content: center;
 `;
@@ -126,11 +126,14 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
   const [detail, setDetail] = useState<string>();
   const [extraInfo, setExtraInfo] = useState<string>();
   const [selectedBtn, setSelectedBtn] = useState<number>(0);
+  const [addressName, setAddressName] = useState<string | null>(null);
   const btnRef = useRef<TouchableOpacity>(null);
+
   const {address} = route.params;
   const [keyboardHeight] = useKeyboard();
   useEffect(() => {
     setDetail('');
+    setExtraInfo('');
   }, []);
   return (
     <>
@@ -206,7 +209,13 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
               selected={selectedBtn}
               key="1"
               onPress={() => {
-                setSelectedBtn(1);
+                if (selectedBtn === 1) {
+                  setSelectedBtn(0);
+                  setAddressName(null);
+                } else {
+                  setSelectedBtn(1);
+                  setAddressName('집');
+                }
               }}
               activeOpacity={1.0}>
               <ButtonText1 selectedBtn={selectedBtn}>집</ButtonText1>
@@ -215,7 +224,13 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
               selected={selectedBtn}
               key="2"
               onPress={() => {
-                setSelectedBtn(2);
+                if (selectedBtn === 2) {
+                  setSelectedBtn(0);
+                  setAddressName(null);
+                } else {
+                  setSelectedBtn(2);
+                  setAddressName('회사');
+                }
               }}
               activeOpacity={1.0}>
               <ButtonText2 selectedBtn={selectedBtn}>회사</ButtonText2>
@@ -224,7 +239,13 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
               selected={selectedBtn}
               key="3"
               onPress={() => {
-                setSelectedBtn(3);
+                if (selectedBtn === 3) {
+                  setSelectedBtn(0);
+                  setAddressName(null);
+                } else {
+                  setSelectedBtn(3);
+                  setAddressName('기타');
+                }
               }}
               activeOpacity={1.0}>
               <ButtonText3 selectedBtn={selectedBtn}>기타</ButtonText3>
@@ -242,15 +263,12 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
               extraInfo?.slice(extraInfo?.indexOf('|') + 1, extraInfo?.length),
             );
             navigation.navigate('HomeScreen', {
-              address: route.params.address.slice(
+              main: route.params.address.slice(
                 0,
                 route.params.address.indexOf('('),
               ),
-              addressDetail: detail?.slice(
-                detail?.indexOf('|') + 1,
-                detail?.length,
-              ),
-              extraDetail: extraInfo?.slice(
+              detail: detail?.slice(detail?.indexOf('|') + 1, detail?.length),
+              extra: extraInfo?.slice(
                 extraInfo?.indexOf('|') + 1,
                 extraInfo?.length,
               ),
