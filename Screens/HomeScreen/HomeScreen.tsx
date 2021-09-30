@@ -1,8 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useState} from 'react';
 import * as Animatable from 'react-native-animatable';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 import Ad from '../../Components/MyEatsComponent/Ad';
 import {Address, HomeStackParamList} from '../../types';
@@ -40,14 +41,23 @@ const HomeScreen: React.FC<StackProps> = ({route, navigation}) => {
             navigation.navigate('AddressSettingModal', route.params);
           }}>
           <HeaderText>
-            {route.params.name || route.params.address_name}
+            <Icon name="ios-location-outline" color="gray" size={15} /> &nbsp;
+            {route.params.name ||
+              route.params.address_name.slice(0, 16) + '...'}
+            <Icon name="chevron-down-outline" color="blue" size={16} />
           </HeaderText>
         </HeaderContent>
         <IconWrapper
           onPress={() => {
-            console.log(route.params);
+            try {
+              AsyncStorage.clear();
+            } catch (e) {
+              // clear error
+            }
+
+            console.log('Done.');
           }}>
-          <Icon name="magnify" size={25} color="black" />
+          <Icon name="search" size={25} color="black" />
         </IconWrapper>
       </Header>
       <Body

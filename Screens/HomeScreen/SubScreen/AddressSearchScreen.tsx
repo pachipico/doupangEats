@@ -6,6 +6,8 @@ import {API_KEY} from '../../../config';
 import axios from 'axios';
 import SearchGuide from '../../../Components/HomeComponent/SearchGuide';
 import DataListItem from '../../../Components/HomeComponent/DataListItem';
+import {RouteProp} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Container = styled.SafeAreaView`
   background-color: white;
@@ -38,8 +40,12 @@ const CloseWrapper = styled.TouchableOpacity`
   right: 100px;
 `;
 
-const InputContainer = styled.TouchableOpacity`
+const InputContainer = styled.View`
   margin-bottom: 10px;
+  flex-direction: row;
+  align-items: center;
+  background-color: white;
+  padding-left: 20px;
 `;
 
 const Input = styled.TextInput`
@@ -59,9 +65,10 @@ const TouchWrapper = styled.TouchableOpacity``;
 
 type ModalProps = {
   navigation: StackNavigationProp<HomeStackParamList, 'AddressSearchScreen'>;
+  route: RouteProp<HomeStackParamList, 'AddressSearchScreen'>;
 };
 
-const AddressSearchScreen: React.FC<ModalProps> = ({navigation}) => {
+const AddressSearchScreen: React.FC<ModalProps> = ({navigation, route}) => {
   const [inputText, setInputText] = useState<string>();
   const [searchData, setSearchData] = useState<LocationData[]>([]);
   const url = `https://www.juso.go.kr/addrlink/addrLinkApi.do?confmKey=${API_KEY}&currentPage=1&countPerPage=10&keyword=${inputText}&resultType=json`;
@@ -81,13 +88,17 @@ const AddressSearchScreen: React.FC<ModalProps> = ({navigation}) => {
         <Header>
           <CloseWrapper
             onPress={() => {
-              navigation.navigate('HomeScreen');
+              navigation.navigate('HomeScreen', route.params);
             }}>
-            <CloseButton>X</CloseButton>
+            <CloseButton>
+              <Icon name="close" size={24} color="black" />
+            </CloseButton>
           </CloseWrapper>
           <HeaderText>배달지 주소 설정</HeaderText>
         </Header>
-        <InputContainer onPress={() => {}}>
+        <InputContainer>
+          <Icon name="search" color="#b5b5b5" size={20} />
+
           <Input
             value={inputText}
             autoFocus={true}
@@ -105,7 +116,6 @@ const AddressSearchScreen: React.FC<ModalProps> = ({navigation}) => {
         <DataList>
           {searchData &&
             searchData.map((each, i) => {
-              console.log(each.roadAddr);
               return (
                 <TouchWrapper
                   key={i}

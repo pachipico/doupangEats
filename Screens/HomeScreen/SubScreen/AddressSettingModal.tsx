@@ -41,11 +41,16 @@ const CloseWrapper = styled.TouchableOpacity`
   right: 100px;
 `;
 
-const InputContainer = styled.TouchableOpacity``;
+const InputContainer = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+`;
 
 const InputLocation = styled.Text`
   font-size: 16px;
-  padding: 10px;
+
+  flex-grow: 1;
+  padding: 10px 20px;
   color: gray;
   background-color: white;
 `;
@@ -66,11 +71,14 @@ const HistoryList = styled.View`
   flex: 1;
   background-color: white;
   padding: 16px;
+  padding-right: 0px;
 `;
 
-const HistoryItem = styled.View`
+const HistoryItem = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
+  border-bottom-width: 1px;
+  border-bottom-color: #b5b5b5;
 `;
 
 const HistoryIcon = styled.Text`
@@ -79,22 +87,22 @@ const HistoryIcon = styled.Text`
 
 const TextWrapper = styled.View`
   padding: 10px 0px;
-  flex-grow: 1;
-  border-bottom-width: 1px;
-  border-bottom-color: #b5b5b5;
 `;
 
+const Row = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
 const HistoryItemName = styled.Text`
-  font-size: 16px;
+  font-size: 15px;
+  width: 300px;
 `;
 
 const HistoryItemAddress = styled.Text`
   color: #b5b5b5;
+  width: 300px;
 `;
-const Checked = styled.Text`
-  position: absolute;
-  right: 10px;
-`;
+const Checked = styled.Text``;
 type ModalProps = {
   navigation: StackNavigationProp<HomeStackParamList, 'AddressSettingModal'>;
   route: RouteProp<HomeStackParamList, 'AddressSettingModal'>;
@@ -132,16 +140,20 @@ const AddressSettingModal: React.FC<ModalProps> = ({navigation, route}) => {
             onPress={() => {
               navigation.goBack();
             }}>
-            <CloseButton>X</CloseButton>
+            <CloseButton>
+              <Icon name="close" size={24} color="black" />
+            </CloseButton>
           </CloseWrapper>
           <HeaderText>배달지 주소 설정</HeaderText>
         </Header>
         <InputContainer
           onPress={() => {
-            console.log('pa');
-            navigation.navigate('AddressSearchScreen');
+            navigation.navigate('AddressSearchScreen', route.params);
           }}>
-          <InputLocation>도로명, 건물명 또는 지번으로 검색</InputLocation>
+          <InputLocation>
+            <Icon name="search" color="#b5b5b5" size={20} />
+            &nbsp;도로명, 건물명 또는 지번으로 검색
+          </InputLocation>
         </InputContainer>
         <CurrentButtonWrapper
           onPress={() => {
@@ -176,7 +188,12 @@ const AddressSettingModal: React.FC<ModalProps> = ({navigation, route}) => {
             }
 
             return (
-              <HistoryItem key={i}>
+              <HistoryItem
+                key={i}
+                activeOpacity={1.0}
+                onPress={() => {
+                  navigation.navigate('HomeScreen', each);
+                }}>
                 <HistoryIcon>
                   {each.name == null && (
                     <Icon name="ios-location" color="#b5b5b5" size={20} />
@@ -192,17 +209,21 @@ const AddressSettingModal: React.FC<ModalProps> = ({navigation, route}) => {
                     />
                   )}
                 </HistoryIcon>
-                <TextWrapper>
-                  <HistoryItemName>
-                    {each.name || each.address_name}
-                  </HistoryItemName>
-                  <HistoryItemAddress>{`${each.address_name} ${each.detail}`}</HistoryItemAddress>
-                </TextWrapper>
-                {selected && (
-                  <Checked>
-                    <Icon name="ios-checkmark-sharp" color="blue" size={26} />
-                  </Checked>
-                )}
+
+                <Row>
+                  <TextWrapper>
+                    <HistoryItemName>
+                      {each.name || each.address_name}
+                    </HistoryItemName>
+                    <HistoryItemAddress>{`${each.address_name} ${each.detail}`}</HistoryItemAddress>
+                  </TextWrapper>
+
+                  {selected && (
+                    <Checked>
+                      <Icon name="ios-checkmark-sharp" color="blue" size={26} />
+                    </Checked>
+                  )}
+                </Row>
               </HistoryItem>
             );
           })}

@@ -17,7 +17,9 @@ export const Header = styled.View`
 
 export const HeaderContent = styled.TouchableOpacity``;
 
-export const HeaderText = styled.Text``;
+export const HeaderText = styled.Text`
+  font-size: 16px;
+`;
 
 export const IconWrapper = styled.TouchableOpacity`
   position: absolute;
