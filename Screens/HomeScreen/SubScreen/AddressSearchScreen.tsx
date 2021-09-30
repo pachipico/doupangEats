@@ -6,7 +6,7 @@ import {API_KEY} from '../../../config';
 import axios from 'axios';
 import SearchGuide from '../../../Components/HomeComponent/SearchGuide';
 import DataListItem from '../../../Components/HomeComponent/DataListItem';
-import {Button} from 'react-native';
+
 const Container = styled.SafeAreaView`
   background-color: white;
   flex: 1;

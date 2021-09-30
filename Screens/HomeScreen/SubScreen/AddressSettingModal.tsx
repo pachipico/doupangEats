@@ -1,17 +1,23 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from '@react-native-community/geolocation';
+import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import axios from 'axios';
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import styled from 'styled-components/native';
 import {KAKAO_KEY} from '../../../config';
 import {Address, HomeStackParamList} from '../../../types';
 
 const Container = styled.SafeAreaView`
   background-color: white;
+  flex: 1;
 `;
 
 const ColorContainer = styled.View`
   background-color: #f0efef;
+  flex: 1;
 `;
 
 const Header = styled.View`
@@ -56,20 +62,68 @@ const CurrentLocationButtonText = styled.Text`
   padding: 10px 90px;
 `;
 
+const HistoryList = styled.View`
+  flex: 1;
+  background-color: white;
+  padding: 16px;
+`;
+
+const HistoryItem = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const HistoryIcon = styled.Text`
+  margin-right: 16px;
+`;
+
+const TextWrapper = styled.View`
+  padding: 10px 0px;
+  flex-grow: 1;
+  border-bottom-width: 1px;
+  border-bottom-color: #b5b5b5;
+`;
+
+const HistoryItemName = styled.Text`
+  font-size: 16px;
+`;
+
+const HistoryItemAddress = styled.Text`
+  color: #b5b5b5;
+`;
+const Checked = styled.Text`
+  position: absolute;
+  right: 10px;
+`;
 type ModalProps = {
   navigation: StackNavigationProp<HomeStackParamList, 'AddressSettingModal'>;
+  route: RouteProp<HomeStackParamList, 'AddressSettingModal'>;
 };
 
-const AddressSettingModal: React.FC<ModalProps> = ({navigation}) => {
+const AddressSettingModal: React.FC<ModalProps> = ({navigation, route}) => {
   const [currLocation, setCurrLocation] = useState<Address>();
+  const [history, setHistory] = useState<Address[]>();
   const handleSearch = (lat: number, long: number) => {
     const url = `https://dapi.kakao.com/v2/local/geo/coord2address.json?input_coord=WGS84&y=${lat}&x=${long}`;
     const headers = {Authorization: `KakaoAK ${KAKAO_KEY}`};
     axios.get(url, {headers: headers}).then(response => {
-      // console.log(response.data.documents[0]);
       setCurrLocation(response.data.documents[0].address);
     });
   };
+  const getHistory = useCallback(async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('locationHistory');
+      if (jsonValue !== null) {
+        setHistory(JSON.parse(jsonValue));
+      }
+    } catch (e) {
+      console.log('failed to fetch location history', e);
+    }
+  }, []);
+  useEffect(() => {
+    getHistory();
+  }, [getHistory]);
+
   return (
     <Container>
       <ColorContainer>
@@ -107,6 +161,52 @@ const AddressSettingModal: React.FC<ModalProps> = ({navigation}) => {
             현재 위치로 주소 찾기
           </CurrentLocationButtonText>
         </CurrentButtonWrapper>
+        <HistoryList>
+          {history?.map((each, i) => {
+            let selected = false;
+            if (
+              each.address_name == route.params.address_name &&
+              each.detail == route.params.detail &&
+              each.extra == route.params.extra &&
+              each.name == route.params.name
+            ) {
+              selected = true;
+            } else {
+              selected = false;
+            }
+
+            return (
+              <HistoryItem key={i}>
+                <HistoryIcon>
+                  {each.name == null && (
+                    <Icon name="ios-location" color="#b5b5b5" size={20} />
+                  )}
+                  {each.name === '집' && (
+                    <Icon name="md-home" color="#b5b5b5" size={20} />
+                  )}
+                  {each.name === '회사' && (
+                    <Icon
+                      name="ios-briefcase-outline"
+                      color="#b5b5b5"
+                      size={20}
+                    />
+                  )}
+                </HistoryIcon>
+                <TextWrapper>
+                  <HistoryItemName>
+                    {each.name || each.address_name}
+                  </HistoryItemName>
+                  <HistoryItemAddress>{`${each.address_name} ${each.detail}`}</HistoryItemAddress>
+                </TextWrapper>
+                {selected && (
+                  <Checked>
+                    <Icon name="ios-checkmark-sharp" color="blue" size={26} />
+                  </Checked>
+                )}
+              </HistoryItem>
+            );
+          })}
+        </HistoryList>
       </ColorContainer>
     </Container>
   );

@@ -14,7 +14,7 @@ export type StackParamList = {
 export type HomeStackParamList = {
   HomeNavigator: undefined;
   HomeScreen: Address;
-  AddressSettingModal: undefined;
+  AddressSettingModal: Address;
   AddressSearchScreen: undefined;
   AddressDetail: {address: string};
 };

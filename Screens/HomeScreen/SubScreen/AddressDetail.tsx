@@ -132,24 +132,30 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
 
   const getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('searchHistory');
+      const jsonValue = await AsyncStorage.getItem('locationHistory');
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
-      console.log(e);
+      console.log('failed to get data from storage:', e);
     }
   };
 
-  const saveData = async (data: Address) => {
+  const saveCurrLocation = async (value: Address) => {
     try {
-      let dataArr: Address[] = [];
-      const value: Address[] = await getData();
-      dataArr = [...value];
-      dataArr.push(data);
-
-      JSON.stringify(dataArr);
-      AsyncStorage.setItem('searchHistory', JSON.stringify(dataArr));
+      let history: Address[] = await getData();
+      if (history) {
+        if (history.includes(value)) {
+          console.log('중복');
+        } else {
+          history.push(value);
+        }
+      } else {
+        history = [value];
+      }
+      const jsonValue = JSON.stringify(history);
+      await AsyncStorage.setItem('locationHistory', jsonValue);
+      console.log('successfully saved to storage');
     } catch (e) {
-      console.log(e);
+      console.log('failed to save data to storage:', e);
     }
   };
 
@@ -298,7 +304,8 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
               ),
               name: addressName,
             };
-            saveData(searchedData);
+            console.log(searchedData);
+            saveCurrLocation(searchedData);
             navigation.navigate('HomeScreen', searchedData);
           }}
         />
