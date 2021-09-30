@@ -2,11 +2,12 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useRef, useState} from 'react';
 
-import {HomeStackParamList} from '../../../types';
+import {Address, HomeStackParamList} from '../../../types';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {TouchableOpacity} from 'react-native';
 import {useKeyboard} from '../../../hooks/useKeyboard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -128,6 +129,29 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
   const [selectedBtn, setSelectedBtn] = useState<number>(0);
   const [addressName, setAddressName] = useState<string | null>(null);
   const btnRef = useRef<TouchableOpacity>(null);
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('searchHistory');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const saveData = async (data: Address) => {
+    try {
+      let dataArr: Address[] = [];
+      const value: Address[] = await getData();
+      dataArr = [...value];
+      dataArr.push(data);
+
+      JSON.stringify(dataArr);
+      AsyncStorage.setItem('searchHistory', JSON.stringify(dataArr));
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const {address} = route.params;
   const [keyboardHeight] = useKeyboard();
@@ -262,8 +286,8 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
               detail?.slice(detail?.indexOf('|') + 1, detail?.length),
               extraInfo?.slice(extraInfo?.indexOf('|') + 1, extraInfo?.length),
             );
-            navigation.navigate('HomeScreen', {
-              address_main: route.params.address.slice(
+            const searchedData: Address = {
+              address_name: route.params.address.slice(
                 0,
                 route.params.address.indexOf('('),
               ),
@@ -272,7 +296,10 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
                 extraInfo?.indexOf('|') + 1,
                 extraInfo?.length,
               ),
-            });
+              name: addressName,
+            };
+            saveData(searchedData);
+            navigation.navigate('HomeScreen', searchedData);
           }}
         />
       </ButtonWrapper>
