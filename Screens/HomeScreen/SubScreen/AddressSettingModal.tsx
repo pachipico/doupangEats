@@ -195,15 +195,19 @@ const AddressSettingModal: React.FC<ModalProps> = ({navigation, route}) => {
                   navigation.navigate('HomeScreen', each);
                 }}>
                 <HistoryIcon>
-                  {each.name == null && (
-                    <Icon name="ios-location" color="#b5b5b5" size={20} />
-                  )}
                   {each.name === '집' && (
-                    <Icon name="md-home" color="#b5b5b5" size={20} />
+                    <Icon name="md-home-outline" color="#b5b5b5" size={20} />
                   )}
                   {each.name === '회사' && (
                     <Icon
                       name="ios-briefcase-outline"
+                      color="#b5b5b5"
+                      size={20}
+                    />
+                  )}
+                  {each.name !== '집' && each.name !== '회사' && (
+                    <Icon
+                      name="ios-location-outline"
                       color="#b5b5b5"
                       size={20}
                     />

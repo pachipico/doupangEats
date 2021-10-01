@@ -69,7 +69,7 @@ const AddressInput = styled.TextInput`
 const ButtonContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin: 15px 0px;
+  margin-top: 15px;
 `;
 
 const SelectButton1 = styled.TouchableOpacity<{selected: number}>`
@@ -118,6 +118,13 @@ const ButtonWrapper = styled.View<{keyboardHeight: number}>`
   background-color: #1f6ce2;
 `;
 
+const NameInput = styled.TextInput`
+  font-size: 16px;
+  padding: 16px 0px;
+  border-bottom-width: 1px;
+  border-bottom-color: lightgray;
+`;
+
 type Props = {
   navigation: StackNavigationProp<HomeStackParamList, 'AddressDetail'>;
   route: RouteProp<HomeStackParamList, 'AddressDetail'>;
@@ -128,6 +135,7 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
   const [extraInfo, setExtraInfo] = useState<string>();
   const [selectedBtn, setSelectedBtn] = useState<number>(0);
   const [addressName, setAddressName] = useState<string | null>(null);
+  const [name, setName] = useState<string>();
   const btnRef = useRef<TouchableOpacity>(null);
 
   const getData = async () => {
@@ -281,6 +289,15 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
               <ButtonText3 selectedBtn={selectedBtn}>기타</ButtonText3>
             </SelectButton3>
           </ButtonContainer>
+          {addressName === '기타' && (
+            <NameInput
+              placeholder="주소 별칭"
+              value={name}
+              onChangeText={text => {
+                setName(text);
+              }}
+            />
+          )}
         </Content>
       </Container>
       <ButtonWrapper keyboardHeight={keyboardHeight}>
@@ -302,7 +319,7 @@ const AddressDetail: React.FC<Props> = ({route, navigation}) => {
                 extraInfo?.indexOf('|') + 1,
                 extraInfo?.length,
               ),
-              name: addressName,
+              name: name ? name : addressName,
             };
             console.log(searchedData);
             saveCurrLocation(searchedData);
